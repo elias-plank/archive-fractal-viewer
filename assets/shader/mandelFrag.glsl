@@ -3,7 +3,6 @@ layout (location = 0) out vec4 outColor;
 
 // uniforms
 uniform int depth;
-uniform double screenRatio;
 uniform dvec2 screenSize;
 uniform dvec2 center;
 uniform double zoom;
@@ -15,23 +14,29 @@ vec4 blueTheme(float t);
 void main()
 {
     dvec2 z, c;
-    c.x = screenRatio * (gl_FragCoord.x / screenSize.x - 0.5);
+    c.x = double(screenSize.x / screenSize.y) * (gl_FragCoord.x / screenSize.x - 0.5);
     c.y = (gl_FragCoord.y / screenSize.y - 0.5);
 
-    c.x /= zoom;
-    c.y /= zoom;
+    c /= zoom;
+    c += center;
 
-    c.x += center.x;
-    c.y += center.y;
+    double x, y;
 
     int i;
-    for (i = 0; i < depth; i++) {
-        double x = (z.x * z.x - z.y * z.y) + c.x;
-		double y = (z.y * z.x + z.x * z.y) + c.y;
+    for (i = 0; i < depth; ++i) {
 
-		if((x * x + y * y) > 2.0) break;
-		z.x = x;
-		z.y = y;
+        x = (z.x * z.x - z.y * z.y) + c.x;
+        y = (z.y * z.x + z.x * z.y) + c.y;
+
+		if((x * x + y * y) > 2.0) {
+            
+            break;
+        }
+        else {
+        
+            z.x = x;
+            z.y = y;
+        }
     }
     
     if (theme == 0) {

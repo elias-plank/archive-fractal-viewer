@@ -960,6 +960,12 @@
     <ClInclude Include="src\core\gfx\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="extern\stb_image\stb_image_write.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\util\File.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="extern\glm\detail\func_common.inl">
@@ -1450,6 +1456,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\core\gfx\BufferLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\stb_image\stb_image_write.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

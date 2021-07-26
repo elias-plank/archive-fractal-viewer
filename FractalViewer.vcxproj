@@ -57,7 +57,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS_;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)extern</AdditionalIncludeDirectories>
@@ -75,7 +75,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS_;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)extern</AdditionalIncludeDirectories>
@@ -93,11 +93,13 @@
     <Library Include="lib\glfw3.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="extern\stb_image\stb_image_write.h" />
     <ClInclude Include="src\core\gfx\Renderer.h" />
     <ClInclude Include="src\core\gfx\Shader.h" />
     <ClInclude Include="src\core\gfx\ElementBuffer.h" />
     <ClInclude Include="src\core\gfx\Framebuffer.h" />
     <ClInclude Include="src\core\Core.h" />
+    <ClInclude Include="src\core\util\File.h" />
     <ClInclude Include="src\editor\views\EditorView.h" />
     <ClInclude Include="src\editor\Editor.h" />
     <ClInclude Include="src\core\gfx\BufferLayout.h" />
@@ -549,6 +551,7 @@
     <None Include="assets\shader\mandelFrag.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="extern\stb_image\stb_image_write.c" />
     <ClCompile Include="src\core\gfx\BufferLayout.cpp" />
     <ClCompile Include="src\core\gfx\Renderer.cpp" />
     <ClCompile Include="src\core\gfx\Shader.cpp" />

@@ -1,18 +1,8 @@
 #include "Shader.h"
-#include "../Core.h"
+#include "../util/File.h"
 #include <glm/gtc/type_ptr.hpp>
-#include <fstream>
 
 namespace FractalViewer {
-
-	static std::string readFile(const std::string& path) {
-
-		std::fstream fin = std::fstream(path, std::ios::in);
-
-		ASSERT(fin.good(), "Couldn't open file!");
-
-		return std::string(std::istreambuf_iterator<char>(fin), std::istreambuf_iterator<char>());
-	}
 
 	Shader::~Shader() {
 
@@ -23,8 +13,8 @@ namespace FractalViewer {
 
 	void Shader::Load(const std::string& vertexPath, const std::string& fragmentPath) {
 
-		auto vertex = readFile(vertexPath);
-		auto fragment = readFile(fragmentPath);
+		auto vertex = Util::ReadFile(vertexPath);
+		auto fragment = Util::ReadFile(fragmentPath);
 
 		vertexId = compileShader(vertex, GL_VERTEX_SHADER);
 		fragmentId = compileShader(fragment, GL_FRAGMENT_SHADER);

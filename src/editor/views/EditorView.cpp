@@ -1,5 +1,6 @@
 #include "EditorView.h"
 #include "../../core/App.h"
+#include "../../core/util/File.h"
 
 namespace FractalViewer {
 
@@ -44,7 +45,6 @@ namespace FractalViewer {
 		elementBuffer->SetData(ind.data(), ind.size());
 
 		shader->SetInt("depth", depth);
-		shader->SetDouble("screenRatio", (double)w / (double)h);
 		shader->SetDouble2("screenSize", { w, h });
 		shader->SetDouble2("center", center);
 		shader->SetDouble("zoom", zoom);
@@ -92,7 +92,6 @@ namespace FractalViewer {
 
 			viewportFramebuffer->Resize(w, h);
 
-			shader->SetDouble("screenRatio", (double)w / (double)h);
 			shader->SetDouble2("screenSize", { w, h });
 		}
 
@@ -229,9 +228,24 @@ namespace FractalViewer {
 				shader->SetDouble("zoom", zoom);
 				shader->SetInt("depth", depth);
 			}
-
-			ImGui::PopStyleColor(3);
 		}
+
+		if (ImGui::CollapsingHeader("Export", ImGuiTreeNodeFlags_DefaultOpen)) {
+
+			ImGui::Text("Export Image as PNG");
+
+			if (ImGui::Button("Save as PNG", ImVec2(w, h))) {
+
+				std::string path = Util::SaveFileDialog();
+
+				if (!path.empty()) {
+					
+					viewportFramebuffer->SaveTexture(path);
+				}
+			}
+		}
+
+		ImGui::PopStyleColor(3);
 
 		ImGui::PopItemWidth();
 		ImGui::End();

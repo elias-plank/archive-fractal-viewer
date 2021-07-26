@@ -1,6 +1,8 @@
 #include "Framebuffer.h"
 #include "../../core/Core.h"
 
+#include <stb_image/stb_image_write.h>
+
 namespace FractalViewer {
 
 	Framebuffer::Framebuffer(uint32_t width, uint32_t height) {
@@ -53,5 +55,30 @@ namespace FractalViewer {
 	uint32_t Framebuffer::GetTextureId() const {
 
 		return textureId;
+	}
+
+	void Framebuffer::SaveTexture(const std::string& path) const {
+
+		std::string file = path;
+
+		if (file.find(".png") == std::string::npos) {
+
+			file.append(".png");
+		}
+
+		static uint8_t* data = new uint8_t[3 * size_t(width) * size_t(height)];
+		memset(reinterpret_cast<void*>(data), 0, 3 * size_t(width) * size_t(height));
+
+		glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+		glPixelStorei(GL_PACK_ALIGNMENT, 1);
+		glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, reinterpret_cast<void*>(data));
+
+		stbi_flip_vertically_on_write(true);
+
+		ASSERT(stbi_write_png(file.c_str(), width, height, 3, reinterpret_cast<void*>(data), width * 3), "Couldn't save image!");
+		
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		delete[] data;
 	}
 }

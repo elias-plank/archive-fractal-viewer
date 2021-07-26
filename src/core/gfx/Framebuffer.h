@@ -1,6 +1,6 @@
 #pragma once
 #include <glad/glad.h>
-#include <cstdint>
+#include <fstream>
 
 namespace FractalViewer {
 
@@ -22,6 +22,8 @@ namespace FractalViewer {
 		void Unbind() const;
 
 		uint32_t GetTextureId() const;
+
+		void SaveTexture(const std::string& path) const;
 	};
 }
 

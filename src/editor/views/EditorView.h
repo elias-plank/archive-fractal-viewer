@@ -12,7 +12,7 @@ namespace FractalViewer {
     class EditorView : public View {
         
     private:
-        static inline const std::string dockId = "EditorDock";
+        inline static const std::string dockId = "EditorDock";
 
         // ImGui DockSpace variables
         inline static bool dockspaceOpen = true;
@@ -28,8 +28,6 @@ namespace FractalViewer {
         std::shared_ptr<Shader> shader;
         std::vector<glm::vec2> vert;
         std::vector<uint32_t> ind;
-
-
 
         // Control variables
         int depth;

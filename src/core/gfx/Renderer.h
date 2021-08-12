@@ -4,7 +4,7 @@
 
 namespace FractalViewer {
 
-	static class Renderer {
+	class Renderer {
 
 	public:
 		static void Clear();

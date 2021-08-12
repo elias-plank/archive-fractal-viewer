@@ -27,6 +27,8 @@ namespace FractalViewer {
 		vertexArray->SetElementBuffer(elementBuffer);
 		shader->Load("assets/shader/mandelVertex.glsl", "assets/shader/mandelFrag.glsl");
 
+		// vertices and indices for the quad
+
 		vert = {
 
 			{ -1.0f, -1.0f },
@@ -41,8 +43,8 @@ namespace FractalViewer {
 			2, 0, 3
 		};
 
-		vertexBuffer->SetData(vert.data(), vert.size() * sizeof(float) * 2);
-		elementBuffer->SetData(ind.data(), ind.size());
+		vertexBuffer->SetData(vert.data(), static_cast<uint32_t>(vert.size() * sizeof(float) * 2));
+		elementBuffer->SetData(ind.data(), static_cast<uint32_t>(ind.size()));
 
 		shader->SetInt("depth", depth);
 		shader->SetDouble2("screenSize", { w, h });
@@ -173,7 +175,7 @@ namespace FractalViewer {
 
 			ImGui::Text("Depth (max iterations)");
 
-			if (ImGui::DragInt("Depth", &depth, 1.0, 1.0, 10000)) {
+			if (ImGui::DragInt("Depth", &depth, 1, 1, 10000)) {
 
 				if (depth <= 10000 && depth > 0) {
 
@@ -228,11 +230,17 @@ namespace FractalViewer {
 				shader->SetDouble("zoom", zoom);
 				shader->SetInt("depth", depth);
 			}
+
+			ImGui::PopStyleColor(3);
 		}
 
 		if (ImGui::CollapsingHeader("Export", ImGuiTreeNodeFlags_DefaultOpen)) {
 
 			ImGui::Text("Export Image as PNG");
+
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.58f, 0.00f, 0.82f, 1.0f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.58f, 0.00f, 0.82f, 0.9f));
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.58f, 0.00f, 0.82f, 0.8f));
 
 			if (ImGui::Button("Save as PNG", ImVec2(w, h))) {
 
@@ -243,9 +251,11 @@ namespace FractalViewer {
 					viewportFramebuffer->SaveTexture(path);
 				}
 			}
+
+			ImGui::PopStyleColor(3);
 		}
 
-		ImGui::PopStyleColor(3);
+		
 
 		ImGui::PopItemWidth();
 		ImGui::End();
@@ -256,7 +266,7 @@ namespace FractalViewer {
 		ImGui::Begin("Viewport");
 
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-		ImGui::Image(reinterpret_cast<void*>(viewportFramebuffer->GetTextureId()), viewportSize, { 0, 1 }, { 1, 0 });
+		ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(viewportFramebuffer->GetTextureId())), viewportSize, { 0, 1 }, { 1, 0 });
 
 		ImGui::End();
 	}

@@ -9,6 +9,11 @@ namespace FractalViewer {
 		glGenVertexArrays(1, &rendererId);
 	}
 
+	VertexArray::~VertexArray() {
+
+		glDeleteVertexArrays(1, &rendererId);
+	}
+
 	void VertexArray::SetVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) {
 
 		glBindVertexArray(rendererId);
@@ -22,7 +27,7 @@ namespace FractalViewer {
 		for (auto& current : layout.GetElements()) {
 
 			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, current.count, current.type, current.normalized ? GL_TRUE : GL_FALSE, stride, (const void*)offset);
+			glVertexAttribPointer(index, current.count, current.type, current.normalized ? GL_TRUE : GL_FALSE, stride, (const void*)static_cast<intptr_t>(offset));
 
 			offset += current.stride;
 			index++;

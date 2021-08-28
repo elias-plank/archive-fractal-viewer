@@ -12,6 +12,7 @@ namespace FractalViewer {
 	public:
 		ElementBuffer();
 		ElementBuffer(uint32_t* data, uint32_t count);
+		~ElementBuffer();
 
 		void SetData(uint32_t* data, uint32_t count);
 

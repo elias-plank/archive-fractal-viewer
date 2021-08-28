@@ -16,6 +16,11 @@ namespace FractalViewer {
 		glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW);
 	}
 
+	VertexBuffer::~VertexBuffer() {
+
+		glDeleteBuffers(1, &rendererId);
+	}
+
 	void VertexBuffer::SetData(const void* data, uint32_t size) {
 
 		glBindBuffer(GL_ARRAY_BUFFER, rendererId);

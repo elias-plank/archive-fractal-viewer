@@ -14,6 +14,7 @@ namespace FractalViewer {
 
 	public:
 		VertexArray();
+		~VertexArray();
 
 		void SetVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer);
 		void SetElementBuffer(const std::shared_ptr<ElementBuffer>& elementBuffer);

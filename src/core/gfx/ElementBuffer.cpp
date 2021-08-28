@@ -18,6 +18,11 @@ namespace FractalViewer {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), data, GL_DYNAMIC_DRAW);
 	}
 
+	ElementBuffer::~ElementBuffer() {
+
+		glDeleteBuffers(1, &rendererId);
+	}
+
 	void ElementBuffer::SetData(uint32_t* data, uint32_t count) {
 
 		this->count = count;

@@ -32,6 +32,11 @@ namespace FractalViewer {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	Framebuffer::~Framebuffer() {
+
+		glDeleteFramebuffers(1, &rendererId);
+	}
+
 	void Framebuffer::Resize(uint32_t width, uint32_t height) {
 
 		this->width = width;

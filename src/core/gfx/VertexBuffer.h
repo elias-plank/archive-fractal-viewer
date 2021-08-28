@@ -12,6 +12,7 @@ namespace FractalViewer {
 	public:
 		VertexBuffer();
 		VertexBuffer(const void* data, uint32_t size);
+		~VertexBuffer();
 
 		void SetData(const void* data, uint32_t size);
 		void SetLayout(const BufferLayout& layout);

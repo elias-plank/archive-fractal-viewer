@@ -8,7 +8,7 @@ int main(int argc, char** argv) {
 
 	try {
 
-		auto instance = std::make_unique<FractalViewer::Editor>("FractalViewer", 800, 600);
+		auto instance = std::make_unique<FractalViewer::Editor>("FractalViewer", 1280, 720);
 		instance->Run();
 	}
 	catch (const std::exception& e) {

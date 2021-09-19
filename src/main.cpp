@@ -1,10 +1,6 @@
 #include "editor/Editor.h"
 
-int main(int argc, char** argv) {
-
-	// Suppress compiler warnings
-	UNUSED(argc);
-	UNUSED(argv);
+int main(int, char**) {
 
 	try {
 

@@ -216,10 +216,6 @@ namespace FractalViewer {
 				ImGui::EndCombo();
 			}
 
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.58f, 0.00f, 0.82f, 1.0f));
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.58f, 0.00f, 0.82f, 0.9f));
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.58f, 0.00f, 0.82f, 0.8f));
-
 			if (ImGui::Button("Reset Settings", ImVec2(w, h))) {
 
 				depth = 100;
@@ -230,17 +226,11 @@ namespace FractalViewer {
 				shader->SetDouble("zoom", zoom);
 				shader->SetInt("depth", depth);
 			}
-
-			ImGui::PopStyleColor(3);
 		}
 
 		if (ImGui::CollapsingHeader("Export", ImGuiTreeNodeFlags_DefaultOpen)) {
 
 			ImGui::Text("Export Image as PNG");
-
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.58f, 0.00f, 0.82f, 1.0f));
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.58f, 0.00f, 0.82f, 0.9f));
-			ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.58f, 0.00f, 0.82f, 0.8f));
 
 			if (ImGui::Button("Save as PNG", ImVec2(w, h))) {
 
@@ -251,11 +241,7 @@ namespace FractalViewer {
 					viewportFramebuffer->SaveTexture(path);
 				}
 			}
-
-			ImGui::PopStyleColor(3);
 		}
-
-		
 
 		ImGui::PopItemWidth();
 		ImGui::End();

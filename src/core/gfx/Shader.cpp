@@ -37,7 +37,7 @@ namespace FractalViewer {
 			glGetProgramInfoLog(program, length, &length, &info[0]);
 			glDeleteProgram(program);
 			glDeleteProgram(vertexId);
-			glDeleteProgram(vertexId);
+			glDeleteProgram(fragmentId);
 
 			ASSERT(false, info.c_str());
 		}

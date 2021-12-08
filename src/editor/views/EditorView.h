@@ -33,6 +33,7 @@ namespace FractalViewer {
         int depth;
         glm::dvec2 center;
         double zoom;
+        bool vsync;
 
     public:
         virtual void OnInit() override;

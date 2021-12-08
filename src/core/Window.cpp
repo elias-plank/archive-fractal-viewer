@@ -33,6 +33,7 @@ namespace FractalViewer {
 			exit(-1);
 		}
 
+		glfwSwapInterval(1);
 		glfwSetWindowUserPointer(window, windowData.get());
 
 		glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height)
@@ -118,6 +119,11 @@ namespace FractalViewer {
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
+	}
+
+	void Window::SetVSync(bool on) {
+
+		glfwSwapInterval(on ? 1 : 0);
 	}
 
 	void Window::UpdateViewport(uint32_t width, uint32_t height) {

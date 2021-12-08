@@ -6,6 +6,7 @@ namespace FractalViewer {
 
 	void EditorView::OnInit() {
 
+		vsync = true;
 		depth = 100;
 		zoom = 0.5;
 		center = glm::dvec2(-0.5, 0.0);
@@ -169,6 +170,11 @@ namespace FractalViewer {
 		if (ImGui::CollapsingHeader("Performance", ImGuiTreeNodeFlags_DefaultOpen)) {
 
 			ImGui::Text("FPS: %f", 1.0f / dt);
+			
+			if (ImGui::Checkbox("Enable VSync", &vsync)) {
+
+				App::Get()->GetWindow()->SetVSync(vsync);
+			}
 		}
 
 		if (ImGui::CollapsingHeader("Fractal Settings", ImGuiTreeNodeFlags_DefaultOpen)) {

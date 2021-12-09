@@ -47,6 +47,16 @@ namespace FractalViewer {
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	}
 
+	uint32_t Framebuffer::GetWidth() const {
+
+		return width;
+	}
+
+	uint32_t Framebuffer::GetHeight() const {
+
+		return height;
+	}
+
 	void Framebuffer::Bind() const {
 
 		glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);

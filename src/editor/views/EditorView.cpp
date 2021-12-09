@@ -236,15 +236,51 @@ namespace FractalViewer {
 
 		if (ImGui::CollapsingHeader("Export", ImGuiTreeNodeFlags_DefaultOpen)) {
 
+			static int exportWidth = 1920;
+			static int exportHeight = 1080;
+			static int exportDepth = 500;
+
+			auto width = App::Get()->GetWindow()->GetWidth();
+			auto height = App::Get()->GetWindow()->GetHeight();
+
 			ImGui::Text("Export Image as PNG");
+			ImGui::Separator();
+			ImGui::Text("Resolution");
+			ImGui::InputInt("Width", &exportWidth);
+			ImGui::InputInt("Height", &exportHeight);
+			ImGui::Text("Export Depth");
+			ImGui::InputInt("Export Depth", &exportDepth);
 
 			if (ImGui::Button("Save as PNG", ImVec2(w, h))) {
 
 				std::string path = Util::SaveFileDialog();
 
-				if (!path.empty()) {
-					
-					viewportFramebuffer->SaveTexture(path);
+				try {
+
+					if (!path.empty()) {
+
+						shader->SetInt("depth", exportDepth);
+						shader->SetDouble2("screenSize", { exportWidth, exportHeight });
+						App::Get()->GetWindow()->UpdateViewport(exportWidth, exportHeight);
+
+						viewportFramebuffer->Bind();
+						viewportFramebuffer->Resize(exportWidth, exportHeight);
+
+						Renderer::Clear();
+						Renderer::DrawIndexed(vertexArray, elementBuffer, shader, GL_TRIANGLES);
+						viewportFramebuffer->SaveTexture(path);
+
+						viewportFramebuffer->Resize(width, height);
+						viewportFramebuffer->Unbind();
+
+						shader->SetInt("depth", depth);
+						shader->SetDouble2("screenSize", { width, height });
+						App::Get()->GetWindow()->UpdateViewport(width, height);
+					}
+				}
+				catch (const std::runtime_error& error) {
+
+					ASSERT(false, error.what());
 				}
 			}
 		}

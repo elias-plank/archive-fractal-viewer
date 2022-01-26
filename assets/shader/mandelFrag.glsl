@@ -66,8 +66,8 @@ vec4 orangeTheme(float t) {
 
     if(t < depth) {
 
-        float a = log2(t * depth) * (t / float(depth));
-        return vec4(0.5f * sin(a) + 0.5f, 0.5f * sin(a + 2.094f) + 0.5f, 0.5f * sin(a + 4.188f) + 0.5f, 1.0f);
+        float a = t * 0.2f;
+        return vec4((sin(a) + 1) * 0.5f, (sin(a + 2.1f) + 1.0f) * 0.5f, (sin(a + 4.2f) + 1.0f) * 0.5f, 1.0f);
     }
     else {
     

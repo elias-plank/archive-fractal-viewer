@@ -3,6 +3,8 @@
 
 #include <stb_image/stb_image_write.h>
 
+#include <future>
+
 namespace FractalViewer {
 
 	Framebuffer::Framebuffer(uint32_t width, uint32_t height) {
@@ -88,12 +90,14 @@ namespace FractalViewer {
 		glPixelStorei(GL_PACK_ALIGNMENT, 1);
 		glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, reinterpret_cast<void*>(data));
 
+		std::printf("Writing image to disk...\n");
+
 		stbi_flip_vertically_on_write(true);
 
 		ASSERT(stbi_write_png(file.c_str(), width, height, 3, reinterpret_cast<void*>(data), width * 3), "Couldn't save image!");
 		
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 		delete[] data;
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 }

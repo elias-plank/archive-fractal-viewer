@@ -24,12 +24,9 @@ namespace FractalViewer {
 		void Run();
 		void Close();
 		void OnEvent(const Event& e);
-
 		void PushView(View* view);
-
-		Window* GetWindow();
-
-		static App* Get();
+		[[nodiscard]] Window* GetWindow();
+		[[nodiscard]] static App* Get();
 	};
 }
 

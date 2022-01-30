@@ -28,7 +28,7 @@ void main()
         x = (z.x * z.x - z.y * z.y) + c.x;
         y = (z.y * z.x + z.x * z.y) + c.y;
 
-		if((x * x + y * y) > 4.0) {
+		if(x * x + y * y > 4.0) {
             
             break;
         }
@@ -45,7 +45,7 @@ void main()
     }
     else if(theme == 1) {
     
-        outColor = orangeTheme(float(i));
+        outColor = orangeTheme(i);
     }
     else {
     
@@ -66,8 +66,8 @@ vec4 orangeTheme(float t) {
 
     if(t < depth) {
 
-        float a = t * 0.2f;
-        return vec4((sin(a) + 1) * 0.5f, (sin(a + 2.1f) + 1.0f) * 0.5f, (sin(a + 4.2f) + 1.0f) * 0.5f, 1.0f);
+        float a = 10 * log(t) * 0.2f;
+        return vec4((cos(a) + 1) * 0.5f, (cos(a + 2.1f) + 1.0f) * 0.5f, (cos(a + 4.2f) + 1.0f) * 0.5f, 1.0f);
     }
     else {
     

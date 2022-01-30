@@ -12,11 +12,6 @@ namespace FractalViewer {
     class EditorView : public View {
         
     private:
-        inline static const std::string dockId = "EditorDock";
-
-        // ImGui DockSpace variables
-        inline static bool dockspaceOpen = true;
-        inline static bool optFullscreenPersistant = true;
 
         // Framebuffer for Viewport rendering
         std::shared_ptr<Framebuffer> viewportFramebuffer;
@@ -26,14 +21,13 @@ namespace FractalViewer {
         std::shared_ptr<VertexBuffer> vertexBuffer;
         std::shared_ptr<ElementBuffer> elementBuffer;
         std::shared_ptr<Shader> shader;
-        std::vector<glm::vec2> vert;
-        std::vector<uint32_t> ind;
+        std::vector<glm::vec2> vertices;
+        std::vector<uint32_t> indices;
 
         // Control variables
-        int depth;
+        int iterationDepth;
         glm::dvec2 center;
         double zoom;
-        bool vsync;
 
     public:
         virtual void OnInit() override;

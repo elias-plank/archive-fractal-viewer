@@ -14,7 +14,7 @@ namespace FractalViewer {
 			OnEvent(e);
 		});
 
-		imGuiView = std::make_shared<ImGuiView>(window->NativeWindow());
+		imGuiView = std::make_shared<ImGuiView>(window->GetNativeWindow());
 		lastTime = 0.0f;	
 
 		instance = this;

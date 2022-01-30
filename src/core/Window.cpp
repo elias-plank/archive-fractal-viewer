@@ -159,7 +159,7 @@ namespace FractalViewer {
 		return windowData->running;
 	}
 
-	void* Window::NativeWindow() const {
+	void* Window::GetNativeWindow() const {
 
 		return window;
 	}

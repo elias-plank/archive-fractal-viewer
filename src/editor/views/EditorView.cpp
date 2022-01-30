@@ -6,8 +6,7 @@ namespace FractalViewer {
 
 	void EditorView::OnInit() {
 
-		vsync = true;
-		depth = 100;
+		iterationDepth = 100;
 		zoom = 0.5;
 		center = glm::dvec2(-0.5, 0.0);
 
@@ -28,9 +27,7 @@ namespace FractalViewer {
 		vertexArray->SetElementBuffer(elementBuffer);
 		shader->Load("assets/shader/mandelVertex.glsl", "assets/shader/mandelFrag.glsl");
 
-		// vertices and indices for the quad
-
-		vert = {
+		vertices = {
 
 			{ -1.0f, -1.0f },
 			{  1.0f, -1.0f },
@@ -38,16 +35,16 @@ namespace FractalViewer {
 			{ -1.0f,  1.0f }
 		};
 
-		ind = {
+		indices = {
 
 			0, 1, 2, 
 			2, 0, 3
 		};
 
-		vertexBuffer->SetData(vert.data(), static_cast<uint32_t>(vert.size() * sizeof(float) * 2));
-		elementBuffer->SetData(ind.data(), static_cast<uint32_t>(ind.size()));
+		vertexBuffer->SetData(vertices.data(), static_cast<uint32_t>(vertices.size() * sizeof(float) * 2));
+		elementBuffer->SetData(indices.data(), static_cast<uint32_t>(indices.size()));
 
-		shader->SetInt("depth", depth);
+		shader->SetInt("depth", iterationDepth);
 		shader->SetDouble2("screenSize", { w, h });
 		shader->SetDouble2("center", center);
 		shader->SetDouble("zoom", zoom);
@@ -87,6 +84,7 @@ namespace FractalViewer {
 		auto window = dynamic_cast<const WindowEvent*>(&e);
 		auto scroll = dynamic_cast<const MouseScrollEvent*>(&e);
 		auto key = dynamic_cast<const KeyboardEvent*>(&e);
+		auto mouse = dynamic_cast<const MouseClickEvent*>(&e);
 
 		if (window) {
 
@@ -94,11 +92,8 @@ namespace FractalViewer {
 			auto h = window->GetHeight();
 
 			viewportFramebuffer->Resize(w, h);
-
-			shader->SetDouble2("screenSize", { w, h });
 		}
-
-		if (scroll) {
+		else if (scroll) {
 
 			zoom += scroll->GetY() * 0.1L * zoom;
 
@@ -109,8 +104,7 @@ namespace FractalViewer {
 
 			shader->SetDouble("zoom", zoom);
 		}
-
-		if (key) {
+		else if (key) {
 
 			if (key->IsPressed()) {
 
@@ -145,7 +139,6 @@ namespace FractalViewer {
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				// Terminates the application.
 				if (ImGui::MenuItem("Exit")) {
 
 					App::Get()->Close();
@@ -170,22 +163,17 @@ namespace FractalViewer {
 		if (ImGui::CollapsingHeader("Performance", ImGuiTreeNodeFlags_DefaultOpen)) {
 
 			ImGui::Text("FPS: %f", 1.0f / dt);
-			
-			if (ImGui::Checkbox("Enable VSync", &vsync)) {
-
-				App::Get()->GetWindow()->SetVSync(vsync);
-			}
 		}
 
 		if (ImGui::CollapsingHeader("Fractal Settings", ImGuiTreeNodeFlags_DefaultOpen)) {
 
 			ImGui::Text("Depth (max iterations)");
 
-			if (ImGui::DragInt("Depth", &depth, 1, 1, 10000)) {
+			if (ImGui::DragInt("Depth", &iterationDepth, 1, 1, 10000)) {
 
-				if (depth <= 10000 && depth > 0) {
+				if (iterationDepth <= 10000 && iterationDepth > 0) {
 
-					shader->SetInt("depth", depth);
+					shader->SetInt("depth", iterationDepth);
 				}
 			}
 
@@ -224,13 +212,13 @@ namespace FractalViewer {
 
 			if (ImGui::Button("Reset Settings", ImVec2(w, h))) {
 
-				depth = 100;
+				iterationDepth = 100;
 				zoom = 0.5;
 				center = glm::dvec2(-0.5, 0.0);
 
 				shader->SetDouble2("center", center);
 				shader->SetDouble("zoom", zoom);
-				shader->SetInt("depth", depth);
+				shader->SetInt("depth", iterationDepth);
 			}
 		}
 
@@ -273,7 +261,7 @@ namespace FractalViewer {
 						viewportFramebuffer->Resize(width, height);
 						viewportFramebuffer->Unbind();
 
-						shader->SetInt("depth", depth);
+						shader->SetInt("depth", iterationDepth);
 						shader->SetDouble2("screenSize", { width, height });
 						App::Get()->GetWindow()->UpdateViewport(width, height);
 					}
@@ -293,6 +281,29 @@ namespace FractalViewer {
 
 		ImGui::Begin("Viewport");
 
+		static glm::dvec2 lastMousePosition = App::Get()->GetWindow()->GetCursorPos();
+		const auto currentPosition = App::Get()->GetWindow()->GetCursorPos();
+		const auto contentRegion = ImGui::GetContentRegionAvail();
+		const auto windowWidth = App::Get()->GetWindow()->GetWidth();
+		const auto windowHeight = App::Get()->GetWindow()->GetHeight();
+
+		shader->SetDouble2("screenSize", { contentRegion.x, contentRegion.y });
+
+		if (glfwGetMouseButton(reinterpret_cast<GLFWwindow*>(App::Get()->GetWindow()->GetNativeWindow()), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+
+			if (glm::distance(currentPosition, lastMousePosition) != 0) {
+
+				const auto distanceVec = currentPosition - lastMousePosition;
+				center.x -= (distanceVec.x / (contentRegion.x * zoom)) * windowWidth / windowHeight;
+				center.y += distanceVec.y / (contentRegion.y * zoom);
+
+				shader->SetDouble2("center", center);
+			}
+
+		}
+
+		lastMousePosition = currentPosition;
+
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(viewportFramebuffer->GetTextureId())), viewportSize, { 0, 1 }, { 1, 0 });
 
@@ -302,6 +313,10 @@ namespace FractalViewer {
 #pragma region ImGui DockSpace Init Code
 
 	void EditorView::BeginDockSpace() {
+
+		// ImGui DockSpace variables
+		static bool dockspaceOpen = true;
+		static bool optFullscreenPersistant = true;
 
 		bool optFullscreen = optFullscreenPersistant;
 		static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
@@ -323,7 +338,7 @@ namespace FractalViewer {
 			windowFlags |= ImGuiWindowFlags_NoBackground;
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::Begin(dockId.c_str(), &dockspaceOpen, windowFlags);
+		ImGui::Begin("EditorDock", &dockspaceOpen, windowFlags);
 		ImGui::PopStyleVar();
 
 		if (optFullscreen)
@@ -336,7 +351,7 @@ namespace FractalViewer {
 		style.WindowMinSize.x = 200.0f;
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 		{
-			ImGuiID dockspace_id = ImGui::GetID(dockId.c_str());
+			ImGuiID dockspace_id = ImGui::GetID("EditorDock");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspaceFlags);
 		}
 

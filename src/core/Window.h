@@ -42,15 +42,12 @@ namespace FractalViewer {
 		void SetVSync(bool on);
 		void UpdateViewport(uint32_t width, uint32_t height);
 
-		uint32_t GetWidth() const;
-		uint32_t GetHeight() const;
-		std::string GetWindowTitle() const;
-
-		glm::dvec2 GetCursorPos() const;
-
-		bool& IsRunning() const;
-
-		void* NativeWindow() const;
+		[[nodiscard]] uint32_t GetWidth() const;
+		[[nodiscard]] uint32_t GetHeight() const;
+		[[nodiscard]] std::string GetWindowTitle() const;
+		[[nodiscard]] glm::dvec2 GetCursorPos() const;
+		[[nodiscard]] bool& IsRunning() const;
+		[[nodiscard]] void* GetNativeWindow() const;
 	};
 }
 
